@@ -1,23 +1,35 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
+import { Timer } from './components/Timer';
+import { TrafficLights } from './components/TrafficLights';
 
 function App() {
+  const [color, setColor] = useState('red')
+  const timeoutColor = [
+    {
+      color: 'red',
+      time: 15000
+    },
+    {
+      color: 'yellow',
+      time: 3000
+    },
+    {
+      color: 'green',
+      time: 10000
+    }]
+  useEffect(() => {
+    setInterval(() => {
+      setColor('yellow')
+    }, 10000)
+    return () => {
+      clearInterval()
+    }
+  }, [])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <TrafficLights color={color} />
+      <Timer />
     </div>
   );
 }
