@@ -1,36 +1,40 @@
 import { useEffect, useState } from 'react';
-import { Redirect, Route, Switch } from 'react-router';
+import { Redirect, Route, Switch, withRouter } from 'react-router';
 import { Green } from './Green';
 import { Red } from './Red';
+import { Timer } from './Timer';
 import s from './TrafficLights.module.scss';
 import { Yellow } from './Yellow';
 
-export const TrafficLights = (props) => {
+const TrafficLights = (props) => {
+    const [color, setColor] = useState(props.location.pathname.slice(1))
+    const [time, setTime] = useState(0)
     const [colorNum, setColorNum] = useState(0)
-    const [color, setColor] = useState('red')
     const timeoutColor = [
         {
             color: 'red',
-            time: 3000
-        },
-        {
-            color: 'yellow',
             time: 10000
         },
         {
-            color: 'green',
+            color: 'yellow',
             time: 3000
         },
         {
-            color: 'yellow',
+            color: 'green',
             time: 15000
+        },
+        {
+            color: 'yellow',
+            time: 3000
         }]
     useEffect(() => {
         const { color, time } = timeoutColor[colorNum];
         const timer = setTimeout(() => {
-            setColorNum((colorNum + 1) % 4);
+            setColorNum(() => ((colorNum + 1) % 4));
             setColor(() => color);
+            setTime(() => time)
         }, time)
+        return () => clearTimeout(timer);
     }, [colorNum])
     return (
         <div className={s.wrapperTL}>
@@ -46,6 +50,9 @@ export const TrafficLights = (props) => {
                     <Route path='/green' component={Green} />
                 </div>
             </div>
+            <Timer time={time} />
         </div>
     )
 }
+
+export const TrafficLightsContainer = withRouter(TrafficLights)
