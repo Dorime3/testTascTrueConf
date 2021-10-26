@@ -1,9 +1,13 @@
+import { useEffect, useState } from 'react'
 import s from './Timer.module.scss'
 
 export const Timer = (props) => {
+
+
+
     return (
         <div className={s.timer}>
-            Timer: {props.time / 1000} sec
+            Timer: {props.sec} sec
         </div>
     )
 }

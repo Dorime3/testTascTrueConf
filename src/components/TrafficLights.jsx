@@ -8,34 +8,24 @@ import { Yellow } from './Yellow';
 
 const TrafficLights = (props) => {
     const [color, setColor] = useState(props.location.pathname.slice(1))
-    const [time, setTime] = useState(0)
-    const [colorNum, setColorNum] = useState(0)
-    const timeoutColor = [
-        {
-            color: 'red',
-            time: 10000
-        },
-        {
-            color: 'yellow',
-            time: 3000
-        },
-        {
-            color: 'green',
-            time: 15000
-        },
-        {
-            color: 'yellow',
-            time: 3000
-        }]
+    const [sec, setSec] = useState(0)
+    const [index, setIndex] = useState(0)
+    const duration = [10000, 3000, 15000, 3000];
+    const colors = ['red', 'yellow', 'green', 'yellow'];
+
     useEffect(() => {
-        const { color, time } = timeoutColor[colorNum];
         const timer = setTimeout(() => {
-            setColorNum(() => ((colorNum + 1) % 4));
-            setColor(() => color);
-            setTime(() => time)
-        }, time)
+            setColor(() => colors[index]);
+            setSec(() => duration[index])
+            setIndex(() => ((index + 1) % 4));
+        }, sec)
         return () => clearTimeout(timer);
-    }, [colorNum])
+    }, [index])
+    useEffect(() => {
+        const timer = setTimeout(() => setSec(sec - 1000), 1000);
+        console.log(sec)
+        return () => clearTimeout(timer);
+    }, [sec]);
     return (
         <div className={s.wrapperTL}>
             <div className={s.trafficLights}>
@@ -50,7 +40,7 @@ const TrafficLights = (props) => {
                     <Route path='/green' component={Green} />
                 </div>
             </div>
-            <Timer time={time} />
+            <Timer sec={sec / 1000} />
         </div>
     )
 }
