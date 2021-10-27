@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Redirect, Route, Switch, withRouter } from 'react-router';
+import { Redirect, Route, withRouter } from 'react-router';
 import { Green } from './Green';
 import { Red } from './Red';
 import { Timer } from './Timer';
@@ -16,7 +16,6 @@ const TrafficLights = (props) => {
     useEffect(() => {
         const timer = setTimeout(() => {
             setColor(() => colors[index]);
-
             setSec(() => duration[index])
             setIndex(() => ((index + 1) % 4));
         }, sec);
@@ -36,22 +35,28 @@ const TrafficLights = (props) => {
             clearTimeout(timer);
         };
     }, [sec]);
+    const redirectToColor = (num) => {
+        setIndex(() => num);
+        setColor(() => colors[num]);
+        setSec(() => duration[num]);
+    }
     return (
         <div className={s.wrapperTL}>
             <div className={s.trafficLights}>
                 {color
                     ? <Redirect to={`/${color}`} />
                     : <Redirect to='' />}
-                <div className={s.trafficColor + ' ' + s.offRed}>
+                <div onClick={() => redirectToColor(0)} className={s.trafficColor + ' ' + s.offRed}>
                     <Route path='/red' component={Red} />
                 </div>
-                <div className={s.trafficColor + ' ' + s.offYellow}>
+                <div onClick={() => redirectToColor(1)} className={s.trafficColor + ' ' + s.offYellow}>
                     <Route path='/yellow' component={Yellow} />
                 </div>
-                <div className={s.trafficColor + ' ' + s.offGreen}>
+                <div onClick={() => redirectToColor(2)} className={s.trafficColor + ' ' + s.offGreen}>
                     <Route path='/green' component={Green} />
                 </div>
             </div>
+            <div className={s.redirectToColor}>click on the color you want to redirect</div>
             <Timer sec={Math.round(sec / 1000)} />
         </div>
     )

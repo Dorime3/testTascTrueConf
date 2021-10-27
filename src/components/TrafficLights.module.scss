@@ -4,6 +4,14 @@
     align-items: center;
     width: 50%;
     height: 100vh;
+    position: relative;
+    .redirectToColor {
+        color: rgb(128, 128, 128);
+        font-size: 12px;
+        position: absolute;
+        top: 65%;
+        left: 0;
+    }
 }
 .trafficLights {
     height: 168px;

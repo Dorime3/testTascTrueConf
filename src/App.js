@@ -1,5 +1,4 @@
 import './App.css';
-import { Timer } from './components/Timer';
 import { TrafficLightsContainer } from './components/TrafficLights';
 
 function App() {
