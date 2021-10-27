@@ -16,20 +16,32 @@ const TrafficLights = (props) => {
     useEffect(() => {
         const timer = setTimeout(() => {
             setColor(() => colors[index]);
+
             setSec(() => duration[index])
             setIndex(() => ((index + 1) % 4));
-        }, sec)
+        }, sec);
+        if ((sec < 3000) && (colors[index] === 'yellow')) {
+            if (sec % 1000) {
+                setColor(() => null);
+            } else {
+                setColor(() => colors[index - 1])
+            }
+        }
         return () => clearTimeout(timer);
-    }, [index])
+    }, [index, sec])
     useEffect(() => {
-        const timer = setTimeout(() => setSec(sec - 1000), 1000);
+        const timer = setTimeout(() => setSec(sec - 500), 500);
         console.log(sec)
-        return () => clearTimeout(timer);
+        return () => {
+            clearTimeout(timer);
+        };
     }, [sec]);
     return (
         <div className={s.wrapperTL}>
             <div className={s.trafficLights}>
-                {color && <Redirect to={`/${color}`} />}
+                {color
+                    ? <Redirect to={`/${color}`} />
+                    : <Redirect to='' />}
                 <div className={s.trafficColor + ' ' + s.offRed}>
                     <Route path='/red' component={Red} />
                 </div>
@@ -40,7 +52,7 @@ const TrafficLights = (props) => {
                     <Route path='/green' component={Green} />
                 </div>
             </div>
-            <Timer sec={sec / 1000} />
+            <Timer sec={Math.round(sec / 1000)} />
         </div>
     )
 }
